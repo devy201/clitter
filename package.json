@@ -1,5 +1,5 @@
 {
-  "name": "application-name",
+  "name": "Clitter",
   "version": "0.0.1",
   "description": "Clitter sample app",
   "config": {
@@ -14,15 +14,6 @@
       "node": ">= 0.6.0",
       "npm": ">= 1.0.0"
   },
-  "dependencies": {
-      "express": "3.0.x",
-      "jade": "*",
-      "mongoose": "*",
-      "connect": "*",
-      "connect-mongodb": "*"
-  },
-  "main": "server.js",
-    "scripts": {
-        "start": "node ~/app-root/runtime/repo/server.js"
-    }
+  "dependencies": {},
+  "main": "server.js"
 }
