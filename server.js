@@ -173,7 +173,6 @@ zapp.start();*/
  */
 
 var express = require('express');
-var mongoose = require('mongoose');
 var http = require('http');
 var path = require('path');
 
@@ -212,8 +211,8 @@ app.post('/login', login.login);
 app.get('/signup', signup.signup);
 app.post('/signup', signup.saveUser);*/
 
-http.createServer(app).listen(app.get('port'), function(){
-    console.log("Express server listening on port " + app.get('port'));
+http.createServer(app).listen(app.get('port'), app.get('ipaddress'), function(){
+    console.log("Exgit press server listening on port " + app.get('port')+' ip address '+app.get('ipaddress'));
 });
 
 
