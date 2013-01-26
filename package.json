@@ -6,9 +6,6 @@
       "port": "3001"
   },
   "private": true,
-  "scripts": {
-    "start": "node app.js"
-  },
   "author": {
       "name": "Vlad Lyamzin",
       "email": "devy201@gmail.com"
