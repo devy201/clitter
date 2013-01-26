@@ -1,0 +1,7 @@
+extends  layout
+
+block content
+    form#signup-form(method="post")
+        input(type="text", name="login", required="required")
+        input(type="password", name="pass", required="required")
+        button#sugn-up(type="submit") Sign up

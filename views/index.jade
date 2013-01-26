@@ -1,0 +1,26 @@
+extends layout
+
+block append scripts
+    script(src="/js/front-index.js")
+
+block content
+    .page.index
+        .page-bg
+            img(src='/img/index_bg.jpg')
+        .page-wrapper
+            .main-container
+                .left-block
+                    h1= title
+                    p Welcome to Clitter
+                .right-block
+                    form#login-form.span3(method='post')
+                        if isLogin == false
+                            h4 Log In
+                                span You have input wrong data
+                        else
+                            h4 Log In
+                        input(type="text", name="login_name", required="required", placeholder="Name", value= name)
+                        input(type="password", name="login_pass", required="required", placeholder="Password")
+                        button#sign-in.btn.btn-success(type='submit') Sign in
+                        a#sugn-up.btn.btn-warning(href='/signup') Sign up
+                .clr
