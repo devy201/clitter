@@ -23,6 +23,6 @@
   },
   "main": "server.js",
     "scripts": {
-        "start": "node ../repo/server.js"
+        "start": "node ~/app-root/runtime/repo/server.js"
     }
 }
