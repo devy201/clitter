@@ -21,5 +21,8 @@
       "connect": "*",
       "connect-mongodb": "*"
   },
-  "main": "server.js"
+  "main": "server.js",
+    "scripts": {
+        "start": "node server.js"
+    }
 }
