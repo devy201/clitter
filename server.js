@@ -202,6 +202,7 @@ app.configure('development', function(){
 
 
 app.get('/', function(req, res){
+    console.log('get incoming');
     res.send("OK");
 });
 /*app.post('/', login.login);
