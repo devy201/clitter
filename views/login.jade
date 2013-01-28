@@ -1,9 +1,12 @@
-
 extends content-layout
 
+block header
+    a.btn.head-btn(href="/") Home
+
 block content
-    form#login-form(method="post")
-        input(type="text", name="login_name", required="required")
-        input(type="password", name="login_pass", required="required")
-        button#sugn-up(type="submit") Sign in
+    h2 Sign into system
+    form#login-form.span4.round-bg(method="post")
+        input.span4(type="text", name="login_name", required="required", placeholder="Login Name")
+        input.span4(type="password", name="login_pass", required="required", placeholder="Password")
+        button#sign-in.btn.btn-success(type="submit") Sign in
         a#res-pwd(href="#") Forget password?

@@ -2,10 +2,9 @@ extends  layout
 
 
 block page-wrapper
+    header
+        .head-wrapper
+            block header
     .page
-        .page-wrapper
-            header
-            .content
-                block content
-        .bot-wrap
-    footer
+        .content
+            block content
