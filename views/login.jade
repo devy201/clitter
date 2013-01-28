@@ -1,10 +1,5 @@
-//
-   Created with JetBrains WebStorm.
-   User: vlyamzin
-   Date: 1/23/13
-   Time: 4:26 PM
-   To change this template use File | Settings | File Templates.
-extends  layout
+
+extends content-layout
 
 block content
     form#login-form(method="post")
@@ -12,4 +7,3 @@ block content
         input(type="password", name="login_pass", required="required")
         button#sugn-up(type="submit") Sign in
         a#res-pwd(href="#") Forget password?
-
