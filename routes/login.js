@@ -21,7 +21,7 @@ exports.login = function(req, res){
     inputName = inputName.replace(' ', '');
     Users.findOne({name: inputName}, function(err, data){
         /*login true*/
-        if(data.length != 0){
+        if(data){
             /*
             * pass true
             * */
