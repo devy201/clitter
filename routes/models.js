@@ -7,7 +7,7 @@
  */
 var mongoose = require('mongoose');
 var crypto = require('crypto');
-var Users;
+var Users, LoginToken;
 var Schema = mongoose.Schema;
 var ObjectID = Schema.ObjectId;
 
@@ -25,7 +25,14 @@ var model = mongoose.connect('mongodb://devy:DvY02061989@linus.mongohq.com:10013
  * Model: Users
  * */
 Users = new Schema({
-    name: {type: String, index:{unique: true}},
+    name: {
+        type: String,
+        index: {unique: true}
+    },
+    email: {
+        type: String,
+        index: {unique: true}
+    },
     pass: String,
     salt: String
 });
@@ -59,4 +66,35 @@ Users.method('makeSalt', function(){
 });
 
 
+/*
+* Model: LoginToken
+* */
+LoginToken = new Schema({
+    email: {type: String, index: true},
+    series: {type: String, index: true},
+    token: {type: String, index: true}
+});
+
+LoginToken.virtual('id').get(function(){
+    return this._id.toHexString();
+});
+
+LoginToken.virtual('cookieValue').get(function(){
+    return JSON.stringify({email: this.email, token: this.token, series: this.series})
+});
+
+LoginToken.method('randomToken', function(){
+    return Math.round((new Date().valueOf() * Math.random())) + '';
+});
+
+LoginToken.pre('save', function(next){
+    this.token = this.randomToken();
+
+    if(this.isNew){
+        this.series = this.randomToken();
+    }
+    next();
+});
+
 exports.getUsers = model.model('Users', Users);
+exports.getLoginToken = model.model('LoginToken', LoginToken);
