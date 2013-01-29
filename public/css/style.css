@@ -38,6 +38,9 @@ a.head-btn.active{
     color: #fff;
     background: #222;
 }
+form{
+    float: none !important;
+}
 
 .page{
     min-width: 960px;
@@ -96,7 +99,7 @@ footer{
 .round-bg{
     background: #f9f9f9;
     border-radius: 7px;
-    padding: 12px;
+    padding: 12px 25px;
 }
 
 /*********** Index page *********/
@@ -156,7 +159,7 @@ footer{
 
 /**********Login page**************/
 #login-form{
-    float: none;
+    margin: 0 auto;
 }
 #res-pwd{
     font-size: 12px;
@@ -171,4 +174,26 @@ footer{
 #go-login:hover{
     background: none;
     text-decoration: none;
+}
+
+/**********Sign Up***********/
+#signup-form{
+    margin: 0 auto;
+}
+#signup-form input{
+    margin: 0 30px 0 0;
+}
+#signup-form label{
+    font-style: italic;
+    color: #535353;
+    display: none;
+}
+.form-row{
+    margin: 0 0 20px 0;
+}
+.form-row > *{
+    display: inline-block;
+}
+#signup-form #photoCover{
+    margin: 0;
 }

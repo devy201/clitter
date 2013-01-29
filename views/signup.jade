@@ -5,8 +5,34 @@ block header
     a.head-btn#go-login(href="/login") Already have an account? Sign in
 
 block content
-    h2 Let's use Clitter today
-    form#signup-form.span6(method="post")
-        input(type="text", name="login", required="required")
-        input(type="password", name="pass", required="required")
-        button#sugn-up(type="submit") Sign up
+    form#signup-form.span9.round-bg(method="post")
+        h2 Let's use Clitter today
+        hr
+        .form-row
+            input#login-name.span4(type="text", name="login", required="required", placeholder="Login Name")
+            label#login-name-label(for="login-name") More than 4 character.
+        .form-row
+            input#pass.span4(type="password", name="pass", required="required", placeholder="Password")
+            label#pass-label(for="pass") Keep in mind, password must be complicated
+        .form-row
+            input#email.span4(type="email", name="email", required="required", placeholder="Email")
+            label#email-label(for="email") Input your current email address
+        .form-row
+            button#sugn-up.btn.btn-primary(type="submit") Sign up
+        hr
+        h4 You can put this data later
+        .form-row
+            input#f-name.span4(type="text", name="f_name", placeholder="First Name")
+            label#f-name-label(for="f-name") Input your first name
+        .form-row
+            input#l-name.span4(type="text", name="l_name", placeholder="Last Name")
+            label#l-name-label(for="l-name") Input your last name
+        .form-row
+            input#phone.span4(type="number", name="phone", placeholder="Phone Number")
+            label#phone-label(for="phone") Input your phone number
+        input#file-upload(type="file", name="photo_input", placeholder="Upload your photo", style="display: none;")
+        .input-append
+            input#photoCover.input-large(type="text")
+            a.btn Browse
+block script
+    script(src="/js/front-signup.js")
