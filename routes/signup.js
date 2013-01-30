@@ -13,20 +13,25 @@ exports.signup = function(req, res){
 };
 
 exports.saveUser = function(req, res){
-    var inpName = req.body.login;
+    var inpName = req.body.name;
     var inpPass = req.body.pass;
     var inpEmail = req.body.email;
     var Users = db.getUsers;
     var addNewUser = new Users({name:inpName, email: inpEmail, password: inpPass});
 
     addNewUser.save(function(err, test){
-        if(err){
-            console.log(err);
+        switch (req.params.format){
+
+            case 'json':
+                if(err){
+                    res.send({"answer": false})
+                }
+                else {
+                    //@TODO should redirect to the user main page
+                    res.send({"answer": true});
+                }
         }
-        else {
-            //@TODO should redirect to the user main page
-            res.redirect("index", {title: "Welcome! "+inpName});
-        }
+
     });
 
 

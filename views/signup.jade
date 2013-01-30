@@ -5,20 +5,22 @@ block header
     a.head-btn#go-login(href="/login") Already have an account? Sign in
 
 block content
-    form#signup-form.span9.round-bg(method="post")
+    #signup-form.span9.round-bg
         h2 Let's use Clitter today
+        p.red
         hr
-        .form-row
-            input#login-name.span4(type="text", name="login", required="required", placeholder="Login Name")
-            label#login-name-label(for="login-name") More than 4 character.
-        .form-row
-            input#pass.span4(type="password", name="pass", required="required", placeholder="Password")
-            label#pass-label(for="pass") Keep in mind, password must be complicated
-        .form-row
-            input#email.span4(type="email", name="email", required="required", placeholder="Email")
-            label#email-label(for="email") Input your current email address
-        .form-row
-            button#sugn-up.btn.btn-primary(type="submit") Sign up
+        .required-box
+            .form-row
+                input#login-name.span4(type="text", name="login", required="required", placeholder="Login Name")
+                label#login-name-label(for="login-name") More than 4 character.
+            .form-row
+                input#pass.span4(type="password", name="pass", required="required", placeholder="Password")
+                label#pass-label(for="pass") Keep in mind, password must be complicated
+            .form-row
+                input#email.span4(type="email", name="email", required="required", placeholder="Email")
+                label#email-label(for="email") Input your current email address
+            .form-row
+                button#sign-up.btn.btn-primary Sign up
         hr
         h4 You can put this data later
         .form-row

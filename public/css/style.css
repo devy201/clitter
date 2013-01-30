@@ -38,8 +38,9 @@ a.head-btn.active{
     color: #fff;
     background: #222;
 }
-form{
-    float: none !important;
+
+h2{
+    text-align: center;
 }
 
 .page{
@@ -101,6 +102,9 @@ footer{
     border-radius: 7px;
     padding: 12px 25px;
 }
+.red{
+    color: #F23010;
+}
 
 /*********** Index page *********/
 .page-bg{
@@ -141,17 +145,19 @@ footer{
     background: -ms-linear-gradient(top, rgb(255, 255, 255) 0px, rgb(221, 221, 221) 100%);
     border-radius: 5px;
     padding: 20px;
+    width: 230px;
 }
 .index #login-form h4{
     margin-top: 0;
     padding-bottom: 5px;
     border-bottom: 1px solid #B9BCB4;
 }
-.index #login-form h4 span{
+.index #login-form h4 p{
     font-size: 14px;
-    display: inline-block;
-    color: #F23010;
     font-weight: normal;
+    margin: 0;
+    text-align: left;
+    display: none;
 }
 .index #login-form button{
     margin: 0 10px 0 0;
@@ -160,6 +166,11 @@ footer{
 /**********Login page**************/
 #login-form{
     margin: 0 auto;
+    width: 350px;
+}
+#login-form p.red{
+    display: none;
+    text-align: center;
 }
 #res-pwd{
     font-size: 12px;
@@ -179,6 +190,11 @@ footer{
 /**********Sign Up***********/
 #signup-form{
     margin: 0 auto;
+    float: none;
+}
+#signup-form p.red{
+    display: none;
+    text-align: center;
 }
 #signup-form input{
     margin: 0 30px 0 0;

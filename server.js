@@ -40,13 +40,13 @@ app.configure('development', function(){
 
 
 
-app.get('/', routes.index);
-app.post('/', login.login);
+app.get('/.:format?', routes.index);
+app.post('/.:format?', login.login);
 app.get('/users', user.list);
-app.get('/login', login.loginPageShow);
-app.post('/login', login.login);
-app.get('/signup', signup.signup);
-app.post('/signup', signup.saveUser);
+app.get('/login.:format?', login.loginPageShow);
+app.post('/login.:format?', login.login);
+app.get('/signup.:format?', signup.signup);
+app.post('/signup.:format?', signup.saveUser);
 
 http.createServer(app).listen(app.get('port'), app.get('ipaddress'), function(){
   console.log("Express server listening on port " + app.get('port')+" ip adress "+app.get('ipaddress'));

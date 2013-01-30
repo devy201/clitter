@@ -57,7 +57,6 @@ Users.method('authenticate', function(plainText){
 });
 
 Users.method('encryptPass', function(password){
-    console.log(crypto.createHmac('sha1', this.salt).update(password).digest('hex'));
     return crypto.createHmac('sha1', this.salt).update(password).digest('hex');
 });
 

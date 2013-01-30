@@ -4,10 +4,13 @@ block header
     a.btn.head-btn(href="/") Home
 
 block content
-    form#login-form.span4.round-bg(method="post")
-        h2 Sign into system
+    #login-form.round-bg
+        h2 Sign into the system
+        p.red
         hr
         input.span4(type="text", name="login_name", required="required", placeholder="Login Name")
         input.span4(type="password", name="login_pass", required="required", placeholder="Password")
-        button#sign-in.btn.btn-success(type="submit") Sign in
+        button#sign-in.btn.btn-success Sign in
         a#res-pwd(href="#") Forget password?
+block script
+    script(src="/js/front-login.js")
