@@ -13,6 +13,7 @@ var login = require('./routes/login');
 var signup = require('./routes/signup');
 var http = require('http');
 var path = require('path');
+var db  = require('./routes/models');
 
 
 
@@ -25,7 +26,7 @@ app.configure(function(){
   app.set('view engine', 'jade');
   app.use(express.favicon());
   app.use(express.cookieParser());
-  app.use(express.session({store: mongoStore('mongodb://devy:DvY02061989@linus.mongohq.com:10013/devy_devy201'), secret: 'topsecret'}));
+  app.use(express.session({secret: 'topsecret'}));
   app.use(express.logger('dev'));
   app.use(express.bodyParser());
   app.use(express.methodOverride());
@@ -42,7 +43,7 @@ app.configure('development', function(){
 
 app.get('/.:format?', routes.index);
 app.post('/.:format?', login.login);
-app.get('/users', user.list);
+app.get('/users', loadUser, user.list);
 app.get('/login.:format?', login.loginPageShow);
 app.post('/login.:format?', login.login);
 app.get('/signup.:format?', signup.signup);
@@ -51,5 +52,25 @@ app.post('/signup.:format?', signup.saveUser);
 http.createServer(app).listen(app.get('port'), app.get('ipaddress'), function(){
   console.log("Express server listening on port " + app.get('port')+" ip adress "+app.get('ipaddress'));
 });
+
+function loadUser(req, res, next){
+    var LoginToken = db.getLoginToken;
+
+    if(req.cookies['connect.sid'] && req.cookies.logintoken){
+        var token = JSON.parse(req.cookies.logintoken);
+        LoginToken.findOne({email: token.email, token: token.token}, function(err, data){
+            if(data){
+                console.log('ok');
+                next();
+            }
+            else{
+                res.redirect('login');
+            }
+        });
+    }
+    else{
+        res.redirect('login');
+    }
+}
 
 

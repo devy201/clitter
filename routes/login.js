@@ -17,6 +17,18 @@ exports.login = function(req, res){
     var Users = db.getUsers;
     var LoginToken = db.getLoginToken;
 
+    function saveToken(data){
+        var newToken = new LoginToken({email: data.email});
+
+        newToken.save(function(){
+            res.cookie('logintoken', newToken.cookieValue, {
+                expires: new Date(Date.now()+2*604800000),
+                path: '/'
+            });
+            res.send({'answer': true});
+        });
+    }
+
 
     //find user by name
     if(req.body["name"]){
@@ -31,13 +43,18 @@ exports.login = function(req, res){
                     if(data && data.authenticate(inputPass)){
                         /* Login true*/
                         //Save me
-                        var newToken = new LoginToken({email: data.email});
-                        newToken.save(function(){
-                            res.cookie('logintoken', newToken.cookieValue, {
-                                expires: new Date(Date.now()+2*604800000),
-                                path: '/'
-                            });
-                            res.send({'answer': true});
+
+                        //check if db has already token
+                        LoginToken.findOne({email: data.email}, function(err, result){
+                            //if true - delete token
+                            if(result){
+                                LoginToken.remove({email: data.email}, function(err, result){
+                                    saveToken(data);
+                                });
+                            }
+                            else{
+                                saveToken(data);
+                            }
                         });
                     }
                     /*login false*/
@@ -89,10 +106,5 @@ exports.login = function(req, res){
         });
     }
 
-
-
-
-
-
-
 };
+
