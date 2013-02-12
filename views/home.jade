@@ -1,0 +1,28 @@
+//
+   Created with JetBrains WebStorm.
+   User: vlyamzin
+   Date: 2/11/13
+   Time: 12:01 PM
+   To change this template use File | Settings | File Templates.
+extends  content-layout
+
+block header
+    a.btn.head-btn.active Home
+    a.btn.head-btn(href="/") Tasks
+    button.btn.head-btn#logut Log out
+
+block content
+    .left
+        #user-pic
+            img(src="", alt="User photo")
+        #user-name User User
+        #user-info
+            .all-tastks 10
+    .right
+        .task-box
+            #today
+                .task
+                    .tast-title Some Task
+                    .task-text Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Nam cursus. Morbi ut mi. Nullam enim leo, egestas id, condimentum at, laoreet mattis, massa. Sed eleifend nonummy diam. Praesent mauris ante, elementum et, bibendum at, posuere sit amet, nibh. Duis tincidunt lectus quis dui viverra vestibulum. Suspendisse vulputate aliquam dui. Nulla elementum dui ut augue. Aliquam vehicula mi at mauris. Maecenas placerat, nisl at consequat rhoncus, sem nunc gravida justo, quis eleifend arcu velit quis lacus. Morbi magna magna, tincidunt a, mattis non, imperdiet vitae, tellus. Sed odio est, auctor ac, sollicitudin in, consequat vitae, orci. Fusce id felis. Vivamus sollicitudin metus eget eros.
+            #tomorrow
+            #someday

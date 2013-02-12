@@ -9,6 +9,7 @@ var connect = require('connect');
 var mongoStore = require('connect-mongodb');
 var routes = require('./routes');
 var user = require('./routes/user');
+var home = require('./routes/home');
 var login = require('./routes/login');
 var signup = require('./routes/signup');
 var http = require('http');
@@ -48,6 +49,7 @@ app.get('/login.:format?', login.loginPageShow);
 app.post('/login.:format?', login.login);
 app.get('/signup.:format?', signup.signup);
 app.post('/signup.:format?', signup.saveUser);
+app.get('/:user/home', loadUser, home.home);
 
 http.createServer(app).listen(app.get('port'), app.get('ipaddress'), function(){
   console.log("Express server listening on port " + app.get('port')+" ip adress "+app.get('ipaddress'));
