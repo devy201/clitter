@@ -19,7 +19,7 @@ a {
   color: #00B7FF;
 }
 
-a.head-btn{
+.head-btn{
     color: #bbb;
     font-weight: bolder;
     background: none;
@@ -212,4 +212,96 @@ footer{
 }
 #signup-form #photoCover{
     margin: 0;
+}
+
+/************Home page************/
+#logout{
+    float: right;
+}
+
+.home .left-block{
+    width: 300px;
+}
+.home .left-block > div{
+    margin-bottom: 10px;
+}
+.home .right-block{
+    width: 520px;
+}
+.home .right-block:nth-child(2){
+    margin-bottom: 12px;
+}
+#user-pic{
+    width: 200px;
+}
+
+.home .add-task-box{
+    border: 1px solid #b4b2b2;
+    border-radius: 5px;
+    margin: 0 0 10px 0;
+}
+
+.home .add-task-box .new-task-title{
+    width: 508px;
+    border-radius: 5px 5px 0 0;
+    border-bottom: 1px solid #b4b2b2;
+    height: 35px;
+    padding: 0 5px;
+    font-size: 20px;
+    font-family: Verdana, sans-serif;
+    font-style: italic;
+    color: #6a6a6a;
+}
+
+.home .add-task-box .new-task-area{
+    width: 506px;
+    border: none;
+    border-bottom: 1px solid #b4b2b2;
+    resize: none;
+    border-radius: 0;
+    margin: 0;
+    height: 100px;
+}
+#add-task{
+    float: right;
+    border: none;
+    border-radius: 0 0 5px 0;
+}
+.home .task-box .task-title{
+    cursor: pointer;
+    height: 40px;
+}
+
+.home .task-box .task-title h4{
+    float: left;
+}
+.home .task-box .task-title .btn-cont{
+    float: right;
+    margin: 10px 0;
+    height: 20px;
+    width: 84px;
+    display: none;
+}
+.btn-cont > button{
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    margin: 0 5px;
+    opacity: .5;
+}
+.btn-cont > button:hover{
+    opacity: 1;
+}
+
+.btn-cont .ctrl-task.open{
+    background: url("../img/buttons_sprite.png") 71px 0;
+}
+.btn-cont .ctrl-task.cls{
+    background: url("../img/buttons_sprite.png") -23px 0;
+}
+.btn-cont .edit-task{
+    background: url("../img/buttons_sprite.png") -71px 0;
+}
+.btn-cont .end-task{
+    background: url("../img/buttons_sprite.png") 0 0;
 }
