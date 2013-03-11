@@ -43,6 +43,13 @@ h2{
     text-align: center;
 }
 
+.popover{
+    width: 150px;
+}
+.popover-title{
+    text-align: center;
+}
+
 .page{
     min-width: 960px;
     min-height: 100%;
@@ -267,9 +274,28 @@ footer{
     border: none;
     border-radius: 0 0 5px 0;
 }
+
+.home .task-box .task{
+    border-bottom: 1px solid #b4b2b2;
+}
+.home .task-box .task:last-child{
+    border-bottom: none;
+}
+
 .home .task-box .task-title{
     cursor: pointer;
     height: 40px;
+}
+
+.home .task-box .task.deleted .task-title h4{
+    text-decoration: line-through;
+    color: #6a6a6a;
+    font-style: italic;
+    padding: 0 5px 0 0;
+}
+
+.home .task-box .task-text{
+    margin: 0 0 10px 0;
 }
 
 .home .task-box .task-title h4{
@@ -296,7 +322,7 @@ footer{
 .btn-cont .ctrl-task.open{
     background: url("../img/buttons_sprite.png") 71px 0;
 }
-.btn-cont .ctrl-task.cls{
+.btn-cont .ctrl-task{
     background: url("../img/buttons_sprite.png") -23px 0;
 }
 .btn-cont .edit-task{
@@ -304,4 +330,8 @@ footer{
 }
 .btn-cont .end-task{
     background: url("../img/buttons_sprite.png") 0 0;
+}
+
+#ended{
+    background: gray;
 }

@@ -30,26 +30,28 @@ block content
         .right-block.round-bg
             .task-box
                 #today
-                    .task
+                    .task.visible
                         .task-title
                             h4 Some Task
                             .btn-cont
                                 button.ctrl-task.open
                                 button.edit-task
                                 button.end-task
+                                div.delete-dialog
                             .clr
                         .task-text Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Nam cursus. Morbi ut mi. Nullam enim leo, egestas id, condimentum at, laoreet mattis, massa. Sed eleifend nonummy diam. Praesent mauris ante, elementum et, bibendum at, posuere sit amet, nibh. Duis tincidunt lectus quis dui viverra vestibulum. Suspendisse vulputate aliquam dui. Nulla elementum dui ut augue. Aliquam vehicula mi at mauris. Maecenas placerat, nisl at consequat rhoncus, sem nunc gravida justo, quis eleifend arcu velit quis lacus. Morbi magna magna, tincidunt a, mattis non, imperdiet vitae, tellus. Sed odio est, auctor ac, sollicitudin in, consequat vitae, orci. Fusce id felis. Vivamus sollicitudin metus eget eros.
                     .task
                         .task-title
                             h4 Some Task
                             .btn-cont
-                                button.ctrl-task.cls
+                                button.ctrl-task
                                 button.edit-task
                                 button.end-task
                             .clr
                         .task-text Lorem ipsum dolor sit amet, consectetur adipisicing elit. Deserunt explicabo iusto praesentium sapiente voluptatibus? Ab beatae deleniti enim facere illo inventore laudantium qui! Distinctio fuga ipsum numquam officia quas rem voluptas. Explicabo fugiat inventore iure magni modi nihil reiciendis velit.
                 #tomorrow
                 #someday
+                #ended
     .clr
 block script
     script(src="/js/front-home.js")
