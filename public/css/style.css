@@ -235,7 +235,7 @@ footer{
 .home .right-block{
     width: 520px;
 }
-.home .right-block:nth-child(2){
+.home .right-block{
     margin-bottom: 12px;
 }
 #user-pic{
@@ -260,23 +260,55 @@ footer{
     color: #6a6a6a;
 }
 
+.home .add-task-box .btn-toolbar{
+    margin: 0;
+}
+.home .add-task-box .btn-toolbar a{
+    border-radius: 0;
+    border: none;
+}
+
 .home .add-task-box .new-task-area{
-    width: 506px;
     border: none;
     border-bottom: 1px solid #b4b2b2;
+    border-top: 1px solid #b4b2b2;
     resize: none;
     border-radius: 0;
     margin: 0;
-    height: 100px;
+    padding: 5px;
+    height: 150px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+.home .add-task-box .new-task-btns .datepicker{
+    width: 122px;
+    height: 20px;
+    border-radius: 0 0 0 5px;
+    border: none;
+    border-right: 1px solid #b4b2b2 ;
+}
+input.datepicker::-webkit-input-placeholder { /* WebKit browsers */
+    color:    #333;
+}
+input.datepicker:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+    color:    #333;
+}
+input.datepicker::-moz-placeholder { /* Mozilla Firefox 19+ */
+    color:    #333;
+}
+input.datepicker:-ms-input-placeholder { /* Internet Explorer 10+ */
+    color:    #333;
 }
 #add-task{
     float: right;
     border: none;
     border-radius: 0 0 5px 0;
+    border-left: 1px solid #b4b2b2;
 }
 
 .home .task-box .task{
     border-bottom: 1px solid #b4b2b2;
+    clear: right;
 }
 .home .task-box .task:last-child{
     border-bottom: none;
@@ -284,22 +316,27 @@ footer{
 
 .home .task-box .task-title{
     cursor: pointer;
-    height: 40px;
 }
 
 .home .task-box .task.deleted .task-title h4{
     text-decoration: line-through;
-    color: #6a6a6a;
+    color: rgb(87,87,87);
     font-style: italic;
     padding: 0 5px 0 0;
+}
+.home .task-box .task.deleted .task-text{
+    color: rgb(87,87,87);
 }
 
 .home .task-box .task-text{
     margin: 0 0 10px 0;
+    padding-left: 10px;
+    border-left: 3px solid #b4b2b2;
 }
 
 .home .task-box .task-title h4{
     float: left;
+    width: 430px;
 }
 .home .task-box .task-title .btn-cont{
     float: right;
@@ -332,6 +369,25 @@ footer{
     background: url("../img/buttons_sprite.png") 0 0;
 }
 
-#ended{
-    background: gray;
+.date-mark{
+    float: right;
+}
+#today, #tomorrow, #someday, #ended{
+    display: none;
+}
+#today .date-mark{
+    color: #00cf0f;
+}
+#tomorrow .date-mark{
+    color: #d60912;
+}
+#someday .date-mark{
+    margin-top: 10px;
+    color: #2fcfdc;
+}
+#someday .date-mark:first-child{
+    margin-top: 0;
+}
+.right-block#ended{
+    background: rgb(150, 150, 150);
 }

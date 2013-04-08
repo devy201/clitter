@@ -6,6 +6,45 @@
  * To change this template use File | Settings | File Templates.
  */
 
+var taskArray = []
+
+function Task(title, text, date){
+
+
+    this.getTask = function(){
+        var task = {
+            title: this.title,
+            text: this.text,
+            date: this.parseDate()
+        }
+        return task;
+    }
+    this.getTitle = function(){
+        return this.title;
+    }
+    this.getText = function(){
+        return this.text;
+    }
+    this.getDate = function(){
+        return this.date;
+    }
+    this.parseDate = function (){
+        try{
+            if( moment(date, 'MM/DD/YYYY').isValid()){
+                return date
+            }
+        }
+        catch (error){
+            date = moment().format('MM/DD/YYYY');
+            return date;
+        }
+    }
+
+    this.title = title;
+    this.text = text;
+    this.date = this.parseDate();
+}
+
 function isVisible(){
     $('.task').each(function(i){
         if(!$(this).hasClass('visible')){
@@ -24,33 +63,77 @@ function showTaskNotes(task, button){
     }
 }
 
-function addTask(){
-    var taskTitle = $('.new-task-title').val();
-    var taskText = $('.new-task-area').val();
+function addTaskToHTML(taskTitle, taskText, taskDate, location){
+    var dateMarkArray = location.find('.date-mark');
+    var taskBox = location.find('.task-box');
 
     /* TEMPORARY BLOCK */
-    var taskBlock = $('.task-box #today');
+    //var taskBlock = $('#today .task-box');
 
-    taskBlock.append('<div class="task"><div class="task-title"><h4>'+taskTitle+'</h4><div class="btn-cont">' +
-        '<button class="ctrl-task"></button>' +
-        '<button class="edit-task"></button>' +
-        '<button class="end-task"></button></div></div>' +
-        '<div class="task-text">'+taskText+'</div></div>');
+    if(location.attr('id') != 'someday'){
+        taskBox.append('<div class="task"><div class="task-title"><h4>'+taskTitle+'</h4><div class="btn-cont">' +
+            '<button class="ctrl-task"></button>' +
+            '<button class="edit-task"></button>' +
+            '<button class="end-task"></button></div>' +
+            '<div class="clr"></div></div>' +
+            '<div class="task-text">'+taskText+'</div></div>');
+    }
+    else{
+        if(dateMarkArray.length > 0){
+            var consistBlock;
+            dateMarkArray.each(function(){
+                if($(this).text() == taskDate){
+                    consistBlock = $(this)
+                }
+            });
+            if(consistBlock != null){
+                consistBlock.after('<div class="task"><div class="task-title"><h4>'+taskTitle+'</h4><div class="btn-cont">' +
+                    '<button class="ctrl-task"></button>' +
+                    '<button class="edit-task"></button>' +
+                    '<button class="end-task"></button></div>' +
+                    '<div class="clr"></div></div>' +
+                    '<div class="task-text">'+taskText+'</div></div>')
+            }
+            else{
+                taskBox.append('<div class="date-mark">'+taskDate+'</div><div class="task"><div class="task-title"><h4>'+taskTitle+'</h4><div class="btn-cont">' +
+                    '<button class="ctrl-task"></button>' +
+                    '<button class="edit-task"></button>' +
+                    '<button class="end-task"></button></div>' +
+                    '<div class="clr"></div></div>' +
+                    '<div class="task-text">'+taskText+'</div></div>');
+            }
+        }
+        else{
+            taskBox.append('<div class="date-mark">'+taskDate+'</div><div class="task"><div class="task-title"><h4>'+taskTitle+'</h4><div class="btn-cont">' +
+                '<button class="ctrl-task"></button>' +
+                '<button class="edit-task"></button>' +
+                '<button class="end-task"></button></div>' +
+                '<div class="clr"></div></div>' +
+                '<div class="task-text">'+taskText+'</div></div>');
+        }
+    }
+
+
 
     showButtons();
     isVisible();
     $('.ctrl-task').off('click').on('click', function(){
         showTaskNotes($(this).parents().eq(2).find('.task-text'), $(this));
     });
+    addPopover();
     /*END TEMPORARY*/
 }
 
 function deleteTask(task){
     task.find('.task-text').slideUp('fast');
+    task.find('.task-title .btn-cont').fadeOut('fast');
     task.addClass('deleted').removeClass('visible').delay(300).slideUp('fast', function(){
-        $('#ended').append(task);
+        $('#ended .task-box').append(task);
         task.slideDown()
     });
+    if(task.prev().hasClass('date-mark') && (task.next().hasClass('date-mark') || task.next().length == 0)){
+        task.prev().remove();
+    }
     task.find('.ctrl-task').removeClass('open');
 
 
@@ -78,11 +161,7 @@ function endTask($object, isEnded){
     $('.end-task').popover('hide');
 }
 
-
-$(function(){
-
-    isVisible();
-    showButtons();
+function addPopover(){
     $('.end-task').each(function(){
         $(this).popover({
             title: "End task?",
@@ -92,6 +171,50 @@ $(function(){
             placement: 'top'
         })
     });
+}
+
+function hideUnusedBlocks(){
+    $('#today .task-box, #tomorrow .task-box, #someday .task-box, #ended .task-box').each(function(){
+        if($(this).children('div').hasClass('task') ){
+            $(this).parent().show();
+        }
+        else{
+            $(this).parent().hide();
+        }
+    });
+}
+
+//tasks is the array of Taks objects
+//we will receive it from server
+function showUserTasks(tasks){
+    var curDate = moment().format('MM/DD/YYYY');
+    for(var task in tasks){
+        var tTitle = tasks[task].title;
+        var tText = tasks[task].text;
+        var tDate = moment(tasks[task].date);
+        //today
+        if(tDate.diff(curDate, 'days') == 0){
+            //add task into today block
+            addTaskToHTML(tTitle, tText, tDate, $('#today'));
+        }
+        else if(tDate.diff(curDate, 'days') == 1){
+            //add task into tomorrow block
+            addTaskToHTML(tTitle, tText, tDate, $('#tomorrow'));
+        }
+        else {
+            //add task into someday block
+            addTaskToHTML(tTitle, tText, tDate._i, $('#someday'));
+        }
+    }
+}
+
+
+$(function(){
+
+    isVisible();
+    showButtons();
+    addPopover();
+    hideUnusedBlocks();
 
     $('.ctrl-task').on('click', function(){
         showTaskNotes($(this).parents().eq(2).find('.task-text'), $(this));
@@ -99,7 +222,25 @@ $(function(){
 
 
     $('#add-task').on('click', function(){
-        addTask();
+        var taskTitle = $('.new-task-title').val();
+        var taskText = $('.new-task-area').html();
+        var taskDate = $('.new-task-btns .datepicker').val();
+        var newTask = new Task(taskTitle, taskText, taskDate);
+        taskArray.push(newTask)
+        showUserTasks([newTask]);
     })
+
+    $('.home').bind('DOMSubtreeModified', function(){
+        hideUnusedBlocks();
+    });
+
+    $('.datepicker').datepicker();
+
+    $('#editor').wysiwyg();
+
+    $('.dropdown-menu input').click(function() {return false;})
+        .change(function () {$(this).parent('.dropdown-menu').siblings('.dropdown-toggle').dropdown('toggle');})
+        .keydown('esc', function () {this.value='';$(this).change();});
+
 
 });
