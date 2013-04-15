@@ -343,7 +343,12 @@ input.datepicker:-ms-input-placeholder { /* Internet Explorer 10+ */
     margin: 10px 0;
     height: 20px;
     width: 84px;
-    display: none;
+    opacity: 0;
+    transition: opacity 1s;
+    -webkit-transition: opacity .5s;
+}
+.home .task-box .task-title:hover .btn-cont{
+    opacity: 1;
 }
 .btn-cont > button{
     display: inline-block;

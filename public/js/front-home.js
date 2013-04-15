@@ -63,13 +63,14 @@ function showTaskNotes(task, button){
     }
 }
 
-function addTaskToHTML(taskTitle, taskText, taskDate, location){
+function addTaskToHTML(taskTitle, taskText, taskDate, location, prevDateMark){
     var dateMarkArray = location.find('.date-mark');
     var taskBox = location.find('.task-box');
 
     /* TEMPORARY BLOCK */
     //var taskBlock = $('#today .task-box');
 
+    //for task with today or tomorrow id
     if(location.attr('id') != 'someday'){
         taskBox.append('<div class="task"><div class="task-title"><h4>'+taskTitle+'</h4><div class="btn-cont">' +
             '<button class="ctrl-task"></button>' +
@@ -79,6 +80,7 @@ function addTaskToHTML(taskTitle, taskText, taskDate, location){
             '<div class="task-text">'+taskText+'</div></div>');
     }
     else{
+        //append to someday block with existing dateMark
         if(dateMarkArray.length > 0){
             var consistBlock;
             dateMarkArray.each(function(){
@@ -86,6 +88,7 @@ function addTaskToHTML(taskTitle, taskText, taskDate, location){
                     consistBlock = $(this)
                 }
             });
+            //add new task after previous with the same dateMark
             if(consistBlock != null){
                 consistBlock.after('<div class="task"><div class="task-title"><h4>'+taskTitle+'</h4><div class="btn-cont">' +
                     '<button class="ctrl-task"></button>' +
@@ -94,15 +97,28 @@ function addTaskToHTML(taskTitle, taskText, taskDate, location){
                     '<div class="clr"></div></div>' +
                     '<div class="task-text">'+taskText+'</div></div>')
             }
+            //append to someday block with new dateMark
             else{
-                taskBox.append('<div class="date-mark">'+taskDate+'</div><div class="task"><div class="task-title"><h4>'+taskTitle+'</h4><div class="btn-cont">' +
-                    '<button class="ctrl-task"></button>' +
-                    '<button class="edit-task"></button>' +
-                    '<button class="end-task"></button></div>' +
-                    '<div class="clr"></div></div>' +
-                    '<div class="task-text">'+taskText+'</div></div>');
+                if(prevDateMark){
+                    var test = taskBox.find('.date-mark:contains('+prevDateMark+')');
+                        test.before('<div class="date-mark">'+taskDate+'</div><div class="task"><div class="task-title"><h4>'+taskTitle+'</h4><div class="btn-cont">' +
+                        '<button class="ctrl-task"></button>' +
+                        '<button class="edit-task"></button>' +
+                        '<button class="end-task"></button></div>' +
+                        '<div class="clr"></div></div>' +
+                        '<div class="task-text">'+taskText+'</div></div>');
+                }
+                else{
+                    taskBox.append('<div class="date-mark">'+taskDate+'</div><div class="task"><div class="task-title"><h4>'+taskTitle+'</h4><div class="btn-cont">' +
+                        '<button class="ctrl-task"></button>' +
+                        '<button class="edit-task"></button>' +
+                        '<button class="end-task"></button></div>' +
+                        '<div class="clr"></div></div>' +
+                        '<div class="task-text">'+taskText+'</div></div>');
+                }
             }
         }
+        //append to someday block with new dateMark if this block is empty
         else{
             taskBox.append('<div class="date-mark">'+taskDate+'</div><div class="task"><div class="task-title"><h4>'+taskTitle+'</h4><div class="btn-cont">' +
                 '<button class="ctrl-task"></button>' +
@@ -113,9 +129,6 @@ function addTaskToHTML(taskTitle, taskText, taskDate, location){
         }
     }
 
-
-
-    showButtons();
     isVisible();
     $('.ctrl-task').off('click').on('click', function(){
         showTaskNotes($(this).parents().eq(2).find('.task-text'), $(this));
@@ -126,7 +139,6 @@ function addTaskToHTML(taskTitle, taskText, taskDate, location){
 
 function deleteTask(task){
     task.find('.task-text').slideUp('fast');
-    task.find('.task-title .btn-cont').fadeOut('fast');
     task.addClass('deleted').removeClass('visible').delay(300).slideUp('fast', function(){
         $('#ended .task-box').append(task);
         task.slideDown()
@@ -139,7 +151,7 @@ function deleteTask(task){
 
 }
 
-function showButtons(){
+/*function showButtons(){
     $('.task-title')
         .on('mouseenter', function(){
             $(this).children('.btn-cont').fadeIn('fast');
@@ -147,7 +159,7 @@ function showButtons(){
         .on('mouseleave', function(){
             $(this).children('.btn-cont').fadeOut('fast');
         });
-}
+}*/
 
 function endTaskButtons(){
     return '<button id="end-yes" class="btn" onclick="endTask($(this), true)" style="margin-right: 28px;">Yes</button>'+
@@ -192,7 +204,6 @@ function showUserTasks(tasks){
         var tTitle = tasks[task].title;
         var tText = tasks[task].text;
         var tDate = moment(tasks[task].date);
-        //today
         if(tDate.diff(curDate, 'days') == 0){
             //add task into today block
             addTaskToHTML(tTitle, tText, tDate, $('#today'));
@@ -203,8 +214,33 @@ function showUserTasks(tasks){
         }
         else {
             //add task into someday block
-            addTaskToHTML(tTitle, tText, tDate._i, $('#someday'));
+            var appendBefore = tDate;
+            var emptyAppend = false;
+            for(var elem in taskArray){
+                var elemDate = moment(taskArray[elem].date);
+                //add task before the newest task in array
+                if(elemDate.diff(appendBefore) > 0){
+                    appendBefore = elemDate;
+                    addTaskToHTML(tTitle, tText, tDate._i, $('#someday'), appendBefore._i);
+                    emptyAppend = false;
+                    break;
+                }
+                //if not add new task to the end of array
+                else{
+                    emptyAppend = true;
+                }
+            }
+            if(taskArray.length == 0 || emptyAppend){
+                addTaskToHTML(tTitle, tText, tDate._i, $('#someday'));
+                emptyAppend = false;
+            }
         }
+        taskArray.push(tasks[0]);
+        taskArray.sort(function(a, b){
+            var textA = a.date;
+            var textB = b.date;
+            return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+        });
     }
 }
 
@@ -212,7 +248,6 @@ function showUserTasks(tasks){
 $(function(){
 
     isVisible();
-    showButtons();
     addPopover();
     hideUnusedBlocks();
 
@@ -221,14 +256,20 @@ $(function(){
     });
 
 
-    $('#add-task').on('click', function(){
-        var taskTitle = $('.new-task-title').val();
-        var taskText = $('.new-task-area').html();
-        var taskDate = $('.new-task-btns .datepicker').val();
-        var newTask = new Task(taskTitle, taskText, taskDate);
-        taskArray.push(newTask)
-        showUserTasks([newTask]);
-    })
+    $('#add-task')
+        .on('click', function(){
+            var taskTitle = $('.new-task-title').val();
+            var taskText = $('.new-task-area').html();
+            var taskDate = $('.new-task-btns .datepicker').val();
+            if(taskTitle == ""){
+                $('.new-task-title').attr('placeholder', 'Please, add title!')
+                return false;
+            }
+            else{
+                var newTask = new Task(taskTitle, taskText, taskDate);
+                showUserTasks([newTask]);
+            }
+        });
 
     $('.home').bind('DOMSubtreeModified', function(){
         hideUnusedBlocks();
