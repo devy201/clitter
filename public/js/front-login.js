@@ -48,12 +48,12 @@ $(function(){
                 dataType: 'json',
                 data: JSON.stringify(getInputData()),
                 success: function(data){
-
+                    console.log(data);
                     if(data.answer === false){
                         $('#login-form p.red').text('You have input wrong data').show();
                     }
                     if(data.answer === true){
-                        window.location.href = "/users"
+                        window.location.href = "/"+data.user+"/home";
                     }
                 }
 

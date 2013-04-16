@@ -25,7 +25,7 @@ exports.login = function(req, res){
                 expires: new Date(Date.now()+2*604800000),
                 path: '/'
             });
-            res.send({'answer': true});
+            res.send({'answer': true, 'user': data.name});
         });
     }
 
@@ -88,7 +88,7 @@ exports.login = function(req, res){
                                 expires: new Date(Date.now()+2*604800000),
                                 path: '/'
                             });
-                            res.send({'answer': true});
+                            res.send({'answer': true, 'user': data.name});
                         });
 
                     }

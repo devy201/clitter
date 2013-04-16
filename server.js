@@ -49,7 +49,7 @@ app.get('/login.:format?', login.loginPageShow);
 app.post('/login.:format?', login.login);
 app.get('/signup.:format?', signup.signup);
 app.post('/signup.:format?', signup.saveUser);
-app.get('/:user/home', loadUser, home.home);
+app.get('/:user/home', loadHomePage, home.home);
 
 http.createServer(app).listen(app.get('port'), app.get('ipaddress'), function(){
   console.log("Express server listening on port " + app.get('port')+" ip adress "+app.get('ipaddress'));
@@ -73,6 +73,28 @@ function loadUser(req, res, next){
     else{
         res.redirect('login');
     }
+}
+
+function loadHomePage(req, res, next){
+    var userNameReq = req.params.user;
+    var UserInDB = db.getUsers;
+
+    //if cookies exist
+    if(req.cookies['connect.sid'] && req.cookies.logintoken){
+        var email = JSON.parse(req.cookies.logintoken);
+        UserInDB.findOne({email: email.email}, function(err, data){
+            if(data.name == userNameReq){
+                next();
+            }
+            else{
+                res.redirect('login');
+            }
+        });
+    }
+    else{
+        res.redirect('login');
+    }
+
 }
 
 
