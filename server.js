@@ -11,6 +11,7 @@ var routes = require('./routes');
 var user = require('./routes/user');
 var home = require('./routes/home');
 var login = require('./routes/login');
+var logout = require('./routes/logout');
 var signup = require('./routes/signup');
 var http = require('http');
 var path = require('path');
@@ -50,6 +51,7 @@ app.post('/login.:format?', login.login);
 app.get('/signup.:format?', signup.signup);
 app.post('/signup.:format?', signup.saveUser);
 app.get('/:user/home', loadHomePage, home.home);
+app.get('/logout', logout.logout);
 
 http.createServer(app).listen(app.get('port'), app.get('ipaddress'), function(){
   console.log("Express server listening on port " + app.get('port')+" ip adress "+app.get('ipaddress'));
