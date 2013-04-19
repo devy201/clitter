@@ -7,17 +7,19 @@
  */
 var mongoose = require('mongoose');
 var crypto = require('crypto');
-var Users, LoginToken;
+var Users, LoginToken, Tasks;
 var Schema = mongoose.Schema;
 var ObjectID = Schema.ObjectId;
-
+//mongodb://devy:DvY02061989@linus.mongohq.com:10013/devy_devy201
 /*
 * connect to the database
 * */
+
+console.log(process.env.OPENSHIFT_MONGODB_DB_HOST);
 var model = mongoose.connect('mongodb://devy:DvY02061989@linus.mongohq.com:10013/devy_devy201', function(err){
     if(err) throw  err;
     else{
-        console.log('connected');
+        console.log('connected to database');
     }
 });
 
@@ -95,5 +97,23 @@ LoginToken.pre('save', function(next){
     next();
 });
 
+/*
+* Model: Tasks
+* */
+Tasks = new Schema({
+    title: {type: String, index: true},
+    note: {type: String, index: true},
+    date: {type: String, index: true},
+    creator: {type: String},            //should be an email or name, don't know yet
+    assigner: {type: String},           //should be an email or name, don't know yet
+    status: {type: Number}             //if 0 - open, if 1 - ended, if 2 - closed
+});
+
+Tasks.virtual('id').get(function(){
+    return this._id.toHexString();
+});
+
+
 exports.getUsers = model.model('Users', Users);
 exports.getLoginToken = model.model('LoginToken', LoginToken);
+exports.getTasks = model.model('Tasks', Tasks);
