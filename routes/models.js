@@ -15,7 +15,9 @@ var ObjectID = Schema.ObjectId;
 * connect to the database
 * */
 
-console.log(process.env.OPENSHIFT_MONGODB_DB_HOST);
+
+var uri = 'mongodb://'+process.env.OPENSHIFT_MONGODB_DB_HOST+':'+process.env.OPENSHIFT_MONGODB_DB_PORT+'/';
+console.log(uri);
 var model = mongoose.connect('mongodb://devy:DvY02061989@linus.mongohq.com:10013/devy_devy201', function(err){
     if(err) throw  err;
     else{
