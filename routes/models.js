@@ -16,9 +16,13 @@ var ObjectID = Schema.ObjectId;
 * */
 
 
-var uri = 'mongodb://'+process.env.OPENSHIFT_MONGODB_DB_HOST+':'+process.env.OPENSHIFT_MONGODB_DB_PORT+'/';
+var uri = 'mongodb://'+process.env.OPENSHIFT_MONGODB_DB_HOST+':'+process.env.OPENSHIFT_MONGODB_DB_PORT+'/clitter';
+var options = {
+    user: 'admin',
+    pass: 'e9mfAtplDzXu'
+};
 console.log(uri);
-var model = mongoose.connect('mongodb://devy:DvY02061989@linus.mongohq.com:10013/devy_devy201', function(err){
+var model = mongoose.connect(uri, options, function(err){
     if(err) throw  err;
     else{
         console.log('connected to database');
