@@ -21,9 +21,14 @@ var options = {
     user: 'admin',
     pass: 'e9mfAtplDzXu'
 };
-console.log(uri);
-var model = mongoose.connect(uri, options, function(err){
-    if(err) throw  err;
+var devOption = {
+    user: 'devy',
+    pass: 'DvY02061989'
+};
+var model = mongoose.connect('mongodb://devy:DvY02061989@dharma.mongohq.com:10030/clitter', devOption, function(err){
+    if(err) {
+        throw  err;
+    }
     else{
         console.log('connected to database');
     }
@@ -87,7 +92,7 @@ LoginToken.virtual('id').get(function(){
 });
 
 LoginToken.virtual('cookieValue').get(function(){
-    return JSON.stringify({email: this.email, token: this.token, series: this.series})
+    return JSON.stringify({email: this.email, token: this.token, series: this.series});
 });
 
 LoginToken.method('randomToken', function(){

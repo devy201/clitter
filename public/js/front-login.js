@@ -10,20 +10,16 @@ function getInputData(){
 
     /*check if user input email or name*/
     if(emailRegExp.test(loginName)){
-        return {
-            "email": loginName,
-            "pass": loginPass
-        }
+        return {"email": loginName, "pass": loginPass};
     }
-    else return{
-        "name": loginName,
-        "pass": loginPass
+    else {
+        return{"name": loginName, "pass": loginPass};
     }
 }
 
 function checkRequiredInputs(){
     var isEmpty;
-    $('#login-form input').each(function(i){
+    $('#login-form input').each(function(){
         if($(this).val() === ''){
             $('#login-form p.red').text('Input shouldn\'t be empty').show();
             $(this).focus();
@@ -57,11 +53,7 @@ $(function(){
                     }
                 }
 
-            })
+            });
         }
-
-
-
-
-    })
+    });
 });

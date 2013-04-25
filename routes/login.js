@@ -2,7 +2,7 @@
  * User: vlyamzin
  * Date: 1/23/13
  * Time: 4:29 PM
- */
+*/
 
 
 var db = require('./models');
@@ -31,7 +31,7 @@ exports.login = function(req, res){
 
 
     //find user by name
-    if(req.body["name"]){
+    if(req.body.name){
         var inputName = req.body.name;
         Users.findOne({name: inputName}, function(err, data){
 
@@ -48,7 +48,7 @@ exports.login = function(req, res){
                         LoginToken.findOne({email: data.email}, function(err, result){
                             //if true - delete token
                             if(result){
-                                LoginToken.remove({email: data.email}, function(err, result){
+                                LoginToken.remove({email: data.email}, function(){
                                     saveToken(data);
                                 });
                             }

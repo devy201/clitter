@@ -22,22 +22,23 @@ var db  = require('./routes/models');
 var app = express();
 
 app.configure(function(){
-  app.set('ipaddress', process.env.OPENSHIFT_INTERNAL_IP || "127.0.0.1");
-  app.set('port', process.env.PORT || 8080);
-  app.set('views', __dirname + '/views');
-  app.set('view engine', 'jade');
-  app.use(express.favicon());
-  app.use(express.cookieParser());
-  app.use(express.session({secret: 'topsecret'}));
-  app.use(express.logger('dev'));
-  app.use(express.bodyParser());
-  app.use(express.methodOverride());
-  app.use(app.router);
-  app.use(express.static(path.join(__dirname, 'public')));
+    app.set('ipaddress', process.env.OPENSHIFT_INTERNAL_IP || "127.0.0.1");
+    app.set('port', process.env.PORT || 8080);
+    app.set('views', __dirname + '/views');
+    app.set('view engine', 'jade');
+    app.use(express.favicon());
+    app.use(express.cookieParser());
+    app.use(express.session({secret: 'topsecret'}));
+    app.use(express.logger('dev'));
+    app.use(express.bodyParser());
+    app.use(express.methodOverride());
+    app.use(app.router);
+    app.use(express.static(path.join(__dirname, 'public')));
 });
 
 app.configure('development', function(){
-  app.use(express.errorHandler());
+    app.use(express.errorHandler());
+
 });
 
 
@@ -50,7 +51,8 @@ app.get('/login.:format?', login.loginPageShow);
 app.post('/login.:format?', login.login);
 app.get('/signup.:format?', signup.signup);
 app.post('/signup.:format?', signup.saveUser);
-app.get('/:user/home', loadHomePage, home.home);
+app.get('/:user/home.:format?', loadHomePage, home.home);
+app.post('/:user/home.:format?', loadHomePage, home.save);
 app.get('/logout', logout.logout);
 
 http.createServer(app).listen(app.get('port'), app.get('ipaddress'), function(){
@@ -85,7 +87,7 @@ function loadHomePage(req, res, next){
     if(req.cookies['connect.sid'] && req.cookies.logintoken){
         var email = JSON.parse(req.cookies.logintoken);
         UserInDB.findOne({email: email.email}, function(err, data){
-            if(data.name == userNameReq){
+            if(data && data.name == userNameReq){
                 next();
             }
             else{
