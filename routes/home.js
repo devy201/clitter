@@ -13,7 +13,7 @@ exports.home = function(req, res){
         case 'html':
             res.render('home', {title: 'Home'});        
             break;
-        case 'json':;
+        case 'json':
             getTasks('devy', function(data){
                 res.send({'tasks': data});
             });
@@ -24,13 +24,13 @@ exports.home = function(req, res){
     }
 };
 
-function Task(id, title, text, date, creator){
-
+function Task(id, title, text, date, creator, status){
     this.id = id;
     this.title = title;
     this.text = text;
     this.date = date;
     this.creator = creator;
+    this.status = status;
 }
 
 function getTasks(user, callback){
@@ -40,7 +40,10 @@ function getTasks(user, callback){
     TasksStorage.find({'creator': user}, function(err, data){
         if(data){
             for(var key in data){
-                tasksArray.push(new Task(data[key]._id, data[key].title, data[key].note, data[key].date, data[key].creator));
+                //if status isn't closed
+                if(data[key].status !== 2){
+                    tasksArray.push(new Task(data[key]._id, data[key].title, data[key].note, data[key].date, data[key].creator, data[key].status));
+                }
             }
             callback(tasksArray);
         }
@@ -55,14 +58,14 @@ exports.save = function(req, res){
     switch (req.params.format){
         case 'json':
             if(req.body){
-                var newTask = new TasksStorage({'title': req.body.title, 'note': req.body.text, 'date': req.body.date, 'creator': req.body.creator});
+                var newTask = new TasksStorage({'title': req.body.title, 'note': req.body.text, 'date': req.body.date, 'creator': req.body.creator, 'status': req.body.status});
                 newTask.save(function(err){
                     if(err){
                         throw err;
                     }
                     else{
                         console.log(newTask);
-                        res.send({'answer': true});
+                        res.send({'answer': true, 'id': newTask._id});
                     }
                 });
             }

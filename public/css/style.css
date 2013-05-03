@@ -318,13 +318,13 @@ input.datepicker:-ms-input-placeholder { /* Internet Explorer 10+ */
     cursor: pointer;
 }
 
-.home .task-box .task.deleted .task-title h4{
+.home #ended .task-box .task .task-title h4{
     text-decoration: line-through;
     color: rgb(87,87,87);
     font-style: italic;
     padding: 0 5px 0 0;
 }
-.home .task-box .task.deleted .task-text{
+.home #ended .task-box .task .task-text{
     color: rgb(87,87,87);
 }
 
