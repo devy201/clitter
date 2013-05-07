@@ -376,7 +376,7 @@ $(function(){
                 var newTask = new Task(taskTitle, taskText, taskDate, getNameFromURL(), taskStatus);
                 $.ajax({
                     type: 'POST',
-                    url: '/devy/home.json',
+                    url: '/'+getNameFromURL()+'/home.json',
                     contentType: 'application/json',
                     dataType: 'json',
                     data: JSON.stringify(newTask),
