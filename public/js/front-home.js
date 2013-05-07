@@ -54,11 +54,14 @@ function addTaskToHTML(taskTitle, taskText, taskDate, location, prevDateMark, ta
 
     /* TEMPORARY BLOCK */
     //for task with today or tomorrow id
+    if(location.attr('id') == 'ended'){
+        taskBox.find('.task').addClass('deleted');
+    }
     if(location.attr('id') !== 'someday'){
-        taskBox.append('<div class="task"><div class="task-title"><h4>'+taskTitle+'</h4><div class="btn-cont">' +
+        taskBox.append('<div class="task" data-id="'+taskID+'"><div class="task-title"><h4>'+taskTitle+'</h4><div class="btn-cont">' +
             '<button class="ctrl-task"></button>' +
             '<button class="edit-task"></button>' +
-            '<button class="end-task" data-id="'+taskID+'"></button></div>' +
+            '<button class="end-task"></button></div>' +
             '<div class="clr"></div></div>' +
             '<div class="task-text">'+taskText+'</div></div>');
     }
@@ -73,10 +76,10 @@ function addTaskToHTML(taskTitle, taskText, taskDate, location, prevDateMark, ta
             });
             //add new task after previous with the same dateMark
             if(consistBlock != null){
-                consistBlock.after('<div class="task"><div class="task-title"><h4>'+taskTitle+'</h4><div class="btn-cont">' +
+                consistBlock.after('<div class="task" data-id="'+taskID+'"><div class="task-title"><h4>'+taskTitle+'</h4><div class="btn-cont">' +
                     '<button class="ctrl-task"></button>' +
                     '<button class="edit-task"></button>' +
-                    '<button class="end-task" data-id="'+taskID+'"></button></div>' +
+                    '<button class="end-task"></button></div>' +
                     '<div class="clr"></div></div>' +
                     '<div class="task-text">'+taskText+'</div></div>');
             }
@@ -84,18 +87,18 @@ function addTaskToHTML(taskTitle, taskText, taskDate, location, prevDateMark, ta
             else{
                 if(prevDateMark){
                     var test = taskBox.find('.date-mark:contains('+prevDateMark+')');
-                        test.before('<div class="date-mark">'+taskDate+'</div><div class="task"><div class="task-title"><h4>'+taskTitle+'</h4><div class="btn-cont">' +
+                        test.before('<div class="date-mark">'+taskDate+'</div><div class="task" data-id="'+taskID+'"><div class="task-title"><h4>'+taskTitle+'</h4><div class="btn-cont">' +
                         '<button class="ctrl-task"></button>' +
                         '<button class="edit-task"></button>' +
-                        '<button class="end-task" task-id="'+taskID+'"></button></div>' +
+                        '<button class="end-task"></button></div>' +
                         '<div class="clr"></div></div>' +
                         '<div class="task-text">'+taskText+'</div></div>');
                 }
                 else{
-                    taskBox.append('<div class="date-mark">'+taskDate+'</div><div class="task"><div class="task-title"><h4>'+taskTitle+'</h4><div class="btn-cont">' +
+                    taskBox.append('<div class="date-mark">'+taskDate+'</div><div class="task" data-id="'+taskID+'"><div class="task-title"><h4>'+taskTitle+'</h4><div class="btn-cont">' +
                         '<button class="ctrl-task"></button>' +
                         '<button class="edit-task"></button>' +
-                        '<button class="end-task" data-id="'+taskID+'"></button></div>' +
+                        '<button class="end-task"></button></div>' +
                         '<div class="clr"></div></div>' +
                         '<div class="task-text">'+taskText+'</div></div>');
                 }
@@ -103,10 +106,10 @@ function addTaskToHTML(taskTitle, taskText, taskDate, location, prevDateMark, ta
         }
         //append to someday block with new dateMark if this block is empty
         else{
-            taskBox.append('<div class="date-mark">'+taskDate+'</div><div class="task"><div class="task-title"><h4>'+taskTitle+'</h4><div class="btn-cont">' +
+            taskBox.append('<div class="date-mark">'+taskDate+'</div><div class="task" data-id="'+taskID+'"><div class="task-title"><h4>'+taskTitle+'</h4><div class="btn-cont">' +
                 '<button class="ctrl-task"></button>' +
                 '<button class="edit-task"></button>' +
-                '<button class="end-task" data-id="'+taskID+'"></button></div>' +
+                '<button class="end-task"></button></div>' +
                 '<div class="clr"></div></div>' +
                 '<div class="task-text">'+taskText+'</div></div>');
         }
@@ -120,17 +123,27 @@ function addTaskToHTML(taskTitle, taskText, taskDate, location, prevDateMark, ta
     /*END TEMPORARY*/
 }
 
-function deleteTask(task){
-    task.find('.task-text').slideUp('fast');
-    task.addClass('deleted').removeClass('visible').delay(300).slideUp('fast', function(){
-        $('#ended .task-box').append(task);
-        task.slideDown();
-    });
-    if(task.prev().hasClass('date-mark') && (task.next().hasClass('date-mark') || task.next().length === 0)){
-        task.prev().remove();
-    }
-    task.find('.ctrl-task').removeClass('open');
+function setDeleteAnimation(taskID, status){
 
+    var task = $('.task[data-id='+taskID+']');
+    task.find('.task-text').slideUp('fast');
+
+    if(status == 1){
+        task.addClass('deleted').removeClass('visible').delay(300).slideUp('fast', function(){
+            $('#ended .task-box').append(task);
+            task.slideDown();
+        });
+        if(task.prev().hasClass('date-mark') && (task.next().hasClass('date-mark') || task.next().length === 0)){
+            task.prev().remove();
+        }
+        task.find('.ctrl-task').removeClass('open');
+    }
+    else{
+        // @TODO push query to the creator of the task. If closing was approved, remove task from DOM
+        task.slideUp('fast', function(){
+            this.remove();
+        });
+    }
 
 }
 
@@ -231,7 +244,7 @@ function showUserTasks(tasks){
                 }
             }
             if(taskArray.length === 0 || emptyAppend){
-                addTaskToHTML(tTitle, tText, tDate._i, $('#someday'));
+                addTaskToHTML(tTitle, tText, tDate._i, $('#someday'), null, tID);
                 emptyAppend = false;
             }
         }
@@ -268,6 +281,73 @@ function getNameFromURL(){
     return segment[0];
 }
 
+/**
+ * @param task Task Task, that should be updated
+ * @return Undefined Nothing return
+ * */
+function updateTask(task){
+    $.ajax({
+        type: 'PUT',
+        url: '/'+getNameFromURL()+'/home.json',
+        contentType: 'application/json',
+        dataType: 'json',
+        data: JSON.stringify(task),
+        success: function(data){
+            console.log(data);
+        },
+        error: function(err){
+            console.log(err);
+        }
+    });
+}
+
+/**
+ * @param task Task Task, that should be deleted
+ * @return Undefined Nothing to return
+ * */
+function deleteTask(task){
+    var taskID = task.data('id');
+    if(task.hasClass('deleted')){
+        for(var curTask in taskArray){
+            if(taskArray[curTask].id === taskID){
+                taskArray[curTask].status = 2;
+                sendAjax(taskArray[curTask]);
+            }
+        }
+    }
+    else{
+        for(var curTask in taskArray){
+            if(taskArray[curTask].id === taskID){
+                taskArray[curTask].status = 1;
+                sendAjax(taskArray[curTask]);
+            }
+        }
+    }
+
+    function sendAjax(task){
+        $.ajax({
+            type: 'DELETE',
+            url: '/'+getNameFromURL()+'/home.json',
+            contentType: 'application/json',
+            dataType: 'json',
+            data: JSON.stringify(task),
+            success: function(data){
+                switch (data.answer) {
+                    case 1:
+                        setDeleteAnimation(taskID, data.answer);
+                        break;
+                    case 2:
+                        setDeleteAnimation(taskID, data.answer);
+                        break;
+                    default:
+                }
+            },
+            error: function(err){
+                console.log(err);
+            }
+        });
+    }
+}
 
 $(function(){
 
@@ -275,6 +355,7 @@ $(function(){
     addPopover();
     hideUnusedBlocks();
     loadTasks();
+
 
     $('.ctrl-task').on('click', function(){
         showTaskNotes($(this).parents().eq(2).find('.task-text'), $(this));

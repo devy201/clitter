@@ -14,7 +14,7 @@ exports.home = function(req, res){
             res.render('home', {title: 'Home'});        
             break;
         case 'json':
-            getTasks('devy', function(data){
+            getTasks(req.params.user, function(data){
                 res.send({'tasks': data});
             });
             break;
@@ -79,3 +79,45 @@ exports.save = function(req, res){
     }
 
 };
+
+exports.update = function(req, res){
+    var TasksStorage = db.getTasks;
+
+    switch (req.params.format) {
+        case 'json':
+            if(req.body){
+                TasksStorage.update({'_id': req.body.id}, {
+                    'title': req.body.title,
+                    'note': req.body.text,
+                    'date': req.body.date,
+                    'creator': req.body.creator
+                }, function(err){
+                    console.log(err);
+                    res.send({"answer": "error"});
+                });
+                res.send({"answer": 'updated'});
+            }
+            break;
+        default:
+    }
+};
+
+exports.delete = function(req, res){
+    var TasksStorage = db.getTasks;
+
+    switch (req.params.format) {
+        case 'json':
+            if(req.body){
+                TasksStorage.update({'_id': req.body.id}, {
+                    'status': req.body.status
+                }, function(err){
+                    if(err){
+                        res.send({"answer": "error"});
+                    }
+                });
+                res.send({"answer": req.body.status});
+            }
+            break;
+        default:
+    }
+}

@@ -53,6 +53,8 @@ app.get('/signup.:format?', signup.signup);
 app.post('/signup.:format?', signup.saveUser);
 app.get('/:user/home.:format?', loadHomePage, home.home);
 app.post('/:user/home.:format?', loadHomePage, home.save);
+app.put('/:user/home.:format?', home.update);
+app.delete('/:user/home.:format?', home.delete);
 app.get('/logout', logout.logout);
 
 http.createServer(app).listen(app.get('port'), app.get('ipaddress'), function(){

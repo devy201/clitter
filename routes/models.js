@@ -10,7 +10,7 @@ var crypto = require('crypto');
 var Users, LoginToken, Tasks;
 var Schema = mongoose.Schema;
 var ObjectID = Schema.ObjectId;
-//mongodb://devy:DvY02061989@linus.mongohq.com:10013/devy_devy201
+//mongodb://devy:DvY02061989@dharma.mongohq.com:10030/clitter
 /*
 * connect to the database
 * */
@@ -25,7 +25,7 @@ var devOption = {
     user: 'devy',
     pass: 'DvY02061989'
 };
-var model = mongoose.connect('mongodb://devy:DvY02061989@dharma.mongohq.com:10030/clitter', devOption, function(err){
+var model = mongoose.connect(uri, options, function(err){
     if(err) {
         throw  err;
     }
