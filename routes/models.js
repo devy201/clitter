@@ -21,11 +21,11 @@ var options = {
     user: 'admin',
     pass: 'e9mfAtplDzXu'
 };
-var devOption = {
+var devOptions = {
     user: 'devy',
     pass: 'DvY02061989'
 };
-var model = mongoose.connect(uri, options, function(err){
+var model = mongoose.connect('mongodb://devy:DvY02061989@dharma.mongohq.com:10030/clitter', devOptions, function(err){
     if(err) {
         throw  err;
     }

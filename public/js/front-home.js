@@ -349,12 +349,103 @@ function deleteTask(task){
     }
 }
 
+
+/*
+* TEMP
+* */
+
+var Matrix = window.WebKitCSSMatrix;
+var NUM_LAYER = 5, LAYER_SPACING = 75;
+
+function Page($el){
+    var self = this,
+        $layers,
+        rotation = {x: 0, y: 0, z: 0},
+        identityMatrix = new Matrix(),
+        rotatedMatrix = new Matrix();
+
+    var createLayers,
+        updateLayers,
+        applyTransform;
+
+    self.rotate = function(dx, dy, dz){
+        rotation.x += dx || 0;
+        rotation.y += dy || 0;
+        rotation.z += dz || 0;
+        rotation.x = rotation.x % 360;
+        rotation.y = rotation.y % 360;
+        rotation.z = rotation.z % 360;
+        rotatedMatrix = identityMatrix.rotate(rotation.x, rotation.y, rotation.z);
+        updateLayers();
+    };
+
+    createLayers = function(){
+        var i, layers = '';
+
+        for(i = 0; i < NUM_LAYER; ++i){
+            layers += '<div class="page-layer '+(i+1)+'">'+(i+1)+'</div>';
+        }
+        $layers = $(layers);
+        $el.html($layers);
+    };
+
+    updateLayers= function(){
+        $.each($layers, function(i){
+            applyTransform($(this));
+        });
+    };
+
+    applyTransform = function ($layer) {
+        var matrix = rotatedMatrix.translate(0, 0, $layer.index() * LAYER_SPACING);
+        $layer.css('transform', matrix.toString());
+    };
+
+    createLayers();
+    updateLayers();
+}
+
+function getCoord(ev) {
+    return {
+        x: ev.pageX,
+        y: ev.pageY
+    };
+}
+
 $(function(){
 
     isVisible();
     addPopover();
     hideUnusedBlocks();
     loadTasks();
+
+    var page = new Page($('#page'));
+
+    $('#page').on('mousedown', function(ev){
+        var last = getCoord(ev);
+        $('#page').on('mousemove', function (ev) {
+            var mouse = getCoord(ev);
+            var dx, dy;
+            dx = mouse.x - last.x,
+            dy = mouse.y - last.y;
+            last = mouse;
+            page.rotate(-dy / 2, dx / 2);
+            ev.preventDefault();
+            return false;
+        });
+
+        $('#page').on('mouseup', function (ev) {
+            $('#page').off('mousemove mouseup');
+            ev.preventDefault();
+            return false;
+        });
+
+        ev.preventDefault();
+        return false;
+    });
+    $('.page-layer').on('dblclick', function(event){
+        console.log(event.target);
+        var curLayer = event.target;
+    });
 
 
     $('.ctrl-task').on('click', function(){
